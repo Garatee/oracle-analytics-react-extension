@@ -11,8 +11,8 @@ import Button from 'react-bootstrap/Button';
 
 import { FaUserAlt, FaLock, FaLink } from 'react-icons/fa'
 
-export const OracleForm = () => {
 
+export const OracleForm = (props) => {
   return (
     <Form>
       <MyInputGroup className="col-sm-8">
@@ -47,7 +47,7 @@ export const OracleForm = () => {
           as="textarea" 
         />
       </MyTextAreaInputGroup>
-      <MyButton variant="primary" type="submit"> Submit </MyButton>
+      <MyButton variant="primary" onClick={() => props.onClickSubmitForm()} > Submit </MyButton>
     </Form>
   )
 

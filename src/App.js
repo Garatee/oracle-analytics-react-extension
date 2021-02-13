@@ -9,23 +9,27 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    };
+      ...props
+    }
   }
 
-  doSomething() {
-    const key = "key87";
-    const value = "val87";
-    // chrome.storage.sync.set({key: value}, function() {
-    //   console.log('sync Value is set to ' + value);
+  onClickSubmitForm() {
+    // chrome.storage.sync.set({status: "LOGGED_IN"}, function() {
     // });
   }
 
   render() {
     return (
-      <Wrapper>
-        <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
-        <OracleForm />
-      </Wrapper>
+      this.state.status == "LOGGED_IN" ? (
+        <div>
+          logged in 
+        </div>
+      ) : (
+        <Wrapper>
+          <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
+          <OracleForm onClickSubmitForm={this.onClickSubmitForm} />
+        </Wrapper>
+      )
     )
   }
 

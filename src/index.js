@@ -6,10 +6,10 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// chrome.storage.local.get(null, function (data) {
+// chrome.storage.sync.get(['status'], function (result) {
   ReactDOM.render(
     <React.StrictMode>
-      <App  /> {/** { ...data } */ }
+      <App  />  {/** {...result} */}
     </React.StrictMode>,
     document.getElementById('root')
   )
