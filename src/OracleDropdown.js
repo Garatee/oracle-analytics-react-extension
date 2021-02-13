@@ -12,7 +12,6 @@ export function OracleDropdown(props){
 
   const [shouldShow1, setShouldShow1] = useState(true);
   const [shouldShow2, setShouldShow2] = useState(true);
-
  
   return (
     <Wrapper>

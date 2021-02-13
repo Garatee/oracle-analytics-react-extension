@@ -6,12 +6,27 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-// chrome.storage.sync.get(['status'], (result) => {
+
+const isRunningOnChromeExtension = process.env.NODE_ENV !== 'development';
+
+if(isRunningOnChromeExtension) {
+  chrome.storage.sync.get(['status'], (result) => {
+    ReactDOM.render(
+      <React.StrictMode>
+        <App {...result} isRunningOnChromeExtension={isRunningOnChromeExtension} /> 
+      </React.StrictMode>,
+      document.getElementById('root')
+    )
+  });
+}
+else {
   ReactDOM.render(
     <React.StrictMode>
-      <App /> 
+      <App isRunningOnChromeExtension={isRunningOnChromeExtension} /> 
     </React.StrictMode>,
     document.getElementById('root')
   )
-// });
-// {...result}
+}
+
+
+
