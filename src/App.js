@@ -3,6 +3,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import { OracleForm } from './components/Form'
+import { OracleDropdown } from './OracleDropdown'
 
 class App extends React.Component {
 
@@ -18,18 +19,22 @@ class App extends React.Component {
     // });
   }
 
+  onClickLogout() {
+    // chrome.storage.sync.set({status: "LOGGED_OUT"}, function() {
+    // });
+  }
+
   render() {
     return (
-      this.state.status == "LOGGED_IN" ? (
-        <div>
-          logged in 
-        </div>
-      ) : (
-        <Wrapper>
-          <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
-          <OracleForm onClickSubmitForm={this.onClickSubmitForm} />
-        </Wrapper>
-      )
+      <OracleDropdown onClickLogout={this.onClickLogout} />
+      // this.state.status == "LOGGED_IN" ? (
+      //   <OracleDropdown />
+      // ) : (
+      //   <Wrapper>
+      //     <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
+      //     <OracleForm onClickSubmitForm={this.onClickSubmitForm} />
+      //   </Wrapper>
+      // )
     )
   }
 
