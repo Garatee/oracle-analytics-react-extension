@@ -5,6 +5,12 @@ import styled from 'styled-components'
 import { OracleForm } from './components/Form'
 import { OracleDropdown } from './OracleDropdown'
 
+
+const STATUS = {
+  LOGGED_OUT: "LOGGED_OUT",
+  LOGGED_IN: "LOGGED_IN"
+}
+
 class App extends React.Component {
 
   constructor(props) {
@@ -14,27 +20,26 @@ class App extends React.Component {
     }
   }
 
-  onClickSubmitForm() {
-    // chrome.storage.sync.set({status: "LOGGED_IN"}, function() {
-    // });
+  onClickSubmitForm = () => {
+    this.setState({ status: STATUS.LOGGED_IN });
+    // chrome.storage.sync.set({status: STATUS.LOGGED_IN});
   }
 
-  onClickLogout() {
-    // chrome.storage.sync.set({status: "LOGGED_OUT"}, function() {
-    // });
+  onClickLogout = () => {
+    this.setState({ status: STATUS.LOGGED_OUT })
+    // chrome.storage.sync.set({status: STATUS.LOGGED_OUT});
   }
 
   render() {
     return (
-      <OracleDropdown onClickLogout={this.onClickLogout} />
-      // this.state.status == "LOGGED_IN" ? (
-      //   <OracleDropdown />
-      // ) : (
-      //   <Wrapper>
-      //     <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
-      //     <OracleForm onClickSubmitForm={this.onClickSubmitForm} />
-      //   </Wrapper>
-      // )
+      this.state.status == STATUS.LOGGED_IN ? (
+        <OracleDropdown onClickLogout={this.onClickLogout} />
+      ) : (
+        <Wrapper>
+          <Logo src="logo/oracle-logo-bar.png" alt="oracle logo"/>
+          <OracleForm onClickSubmitForm={this.onClickSubmitForm} />
+        </Wrapper>
+      )
     )
   }
 
