@@ -4,10 +4,23 @@
 	"version": "1.0",
     "manifest_version": 2,
     "permissions": [
-        "contextMenus", 
+        "contextMenus",
         "activeTab",
-        "storage"
+        "storage",
+        "tabs",
+        "<all_urls>"
     ],
+    "content_scripts": [{
+        "matches": [
+            "http://*/*",
+            "https://*/*"
+        ],
+        "js": ["content.js"]
+    }],
+    "background": {
+		"scripts": ["background.js"],
+		"persistent": false
+	},
     "browser_action": {
 		"default_popup": "index.html"
 	},

@@ -12,13 +12,24 @@ export function OracleDropdown(props){
 
   const [shouldShow1, setShouldShow1] = useState(true);
   const [shouldShow2, setShouldShow2] = useState(true);
- 
+
   return (
     <Wrapper>
       <MajorOption onClick={() => setShouldShow1(!shouldShow1)}> <FaCaretDown size={17} style={iconStyle} /> Explore table in Oracle Analytics </MajorOption>
-        <MinorOption shouldShow={shouldShow1}> main_table_countries_today </MinorOption>
-        <MinorOption shouldShow={shouldShow1}> main_table_countries_yesterday </MinorOption>
-        <MinorOption shouldShow={shouldShow1}> main_table_countries_yesterday2 </MinorOption>
+      {!props.isInitialized ? <div />
+        : props.allTableId.length == 0 ?
+          <NoTable> no tables on this page </NoTable>
+          : props.allTableId.map((tableId, index) => (
+            <MinorOption 
+              shouldShow={shouldShow1}
+              key={index}
+              onMouseEnter={() => props.onTargetTable(tableId, true)}
+              onMouseLeave={() => props.onTargetTable(tableId, false)}
+            > 
+              {tableId && tableId.length > 0 ? tableId : "unamed table"} 
+            </MinorOption>
+          ))
+      }
       
       <MajorOption onClick={() => setShouldShow2(!shouldShow2)}> <FaSearch size={17} style={iconStyle} /> Explore popular downloads </MajorOption>
         <MinorOption shouldShow={shouldShow2}> NY Times Covid data </MinorOption>
@@ -62,4 +73,14 @@ const MinorOption = styled(MajorOption)`
   padding-left: 30px;
   color: grey;
   display: ${props => props.shouldShow ? "block" : "none"};
+`
+
+const NoTable = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 7px;
+  text-align: left;
+  padding-left: 30px;
+  color: grey;
+  cursor: text;
 `

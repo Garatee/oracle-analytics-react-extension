@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const isRunningOnChromeExtension = process.env.NODE_ENV !== 'development';
 
 if(isRunningOnChromeExtension) {
-  chrome.storage.sync.get(['status'], (result) => {
+  chrome.storage.sync.get(['allTableId', 'status'], (result) => {
     ReactDOM.render(
       <React.StrictMode>
         <App {...result} isRunningOnChromeExtension={isRunningOnChromeExtension} /> 

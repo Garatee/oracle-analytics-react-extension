@@ -15,8 +15,47 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...props
+      status: props.status,
+      allTableId: [],
+      isInitialized: false
     }
+  }
+
+  componentDidMount() {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const { id: tabId } = tabs[0].url;
+        const code = `
+          var tables = [...document.querySelectorAll("table")];
+          tables.forEach((table, index) => {
+            if(!table.id || table.id.length == 0) {
+              table.id = "unamed_table" + index
+            }
+          })
+          tables.map(element => element.id)
+        `;
+        chrome.tabs.executeScript(tabId, { code }, (result) => {
+          this.setState({ isInitialized: true, allTableId: result[0] })
+        });
+      }
+    );
+  }
+
+  onTargetTable = (tableId, shouldTarget) => {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const { id: tabId } = tabs[0].url;
+        const color = shouldTarget ? "yellow" : "white";
+        const opacity = shouldTarget ? 0.8 : 1;
+        console.log(tableId);
+        const code = `
+          var table = document.getElementById("${tableId}");
+          table.style.backgroundColor = "${color}";
+          table.style.opacity = ${opacity};
+        `;
+        chrome.tabs.executeScript(tabId, { code });
+      }
+    );
   }
 
   onClickSubmitForm = () => {
@@ -34,7 +73,12 @@ class App extends React.Component {
   render() {
     return (
       this.state.status == STATUS.LOGGED_IN ? (
-        <OracleDropdown onClickLogout={this.onClickLogout} />
+        <OracleDropdown 
+          onClickLogout={this.onClickLogout} 
+          onTargetTable={this.onTargetTable}
+          allTableId={this.state.allTableId} 
+          isInitialized={this.state.isInitialized} 
+        />
       ) : (
         <OracleLogin onClickSubmitForm={this.onClickSubmitForm} />
       )
