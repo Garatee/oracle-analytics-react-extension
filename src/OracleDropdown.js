@@ -25,6 +25,7 @@ export function OracleDropdown(props){
               key={index}
               onMouseEnter={() => props.onTargetTable(tableId, true)}
               onMouseLeave={() => props.onTargetTable(tableId, false)}
+              onClick={() => props.onDownloadTable(tableId)}
             > 
               {tableId && tableId.length > 0 ? tableId : "unamed table"} 
             </MinorOption>

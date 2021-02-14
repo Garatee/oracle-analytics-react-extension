@@ -47,13 +47,23 @@ class App extends React.Component {
         const { id: tabId } = tabs[0].url;
         const color = shouldTarget ? "yellow" : "white";
         const opacity = shouldTarget ? 0.8 : 1;
-        console.log(tableId);
         const code = `
           var table = document.getElementById("${tableId}");
           table.style.backgroundColor = "${color}";
           table.style.opacity = ${opacity};
         `;
         chrome.tabs.executeScript(tabId, { code });
+      }
+    );
+  }
+
+  onDownloadTable = (tableId) => {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const { id: tabId } = tabs[0].url;
+        chrome.tabs.executeScript(tabId, {code: `tableIdToDownload = "${tableId}";`}, () => { 
+          chrome.tabs.executeScript(tabId, {file: "downloadcsv.js"});
+        });
       }
     );
   }
@@ -76,8 +86,9 @@ class App extends React.Component {
         <OracleDropdown 
           onClickLogout={this.onClickLogout} 
           onTargetTable={this.onTargetTable}
+          onDownloadTable={this.onDownloadTable}
           allTableId={this.state.allTableId} 
-          isInitialized={this.state.isInitialized} 
+          isInitialized={this.state.isInitialized}
         />
       ) : (
         <OracleLogin onClickSubmitForm={this.onClickSubmitForm} />

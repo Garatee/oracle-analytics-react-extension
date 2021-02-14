@@ -7,6 +7,6 @@ chrome.contextMenus.onClicked.addListener(function(item, tab) {
     if(item.menuItemId == "DLCSV"){	
         chrome.tabs.executeScript(tab.id, {code: "dltcsvRightClick = true;", allFrames:true}, function() { 
           chrome.tabs.executeScript(tab.id, {file: "downloadcsv.js", allFrames:true});
-        });			
+        });
     }
 });

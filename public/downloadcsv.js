@@ -31,25 +31,8 @@ function csvDownloadHelper(filename, csvTwoDimensionalArray) {
   addHiddenCvsTag(filename);
 }
 
-// adds a hidden <div> tag with a special id for selenium to pick up
-function addHiddenCvsTag(info) {
-  const hiddenElement = document.createElement("div"); 
-  hiddenElement.setAttribute("id", "hidden_element_for_selenium");
-  hiddenElement.style.display = "none";
-  document.body.appendChild(hiddenElement); 
-  hiddenElement.innerText = info;
-}
-
-
-function startDownloadRightClick() {
-  if(document.getSelection().focusNode == null)return;
-  let clickedEl = document.getSelection().focusNode.parentElement;
-  let table = clickedEl.closest("table");		
-  if(table === null){
-      alert("No HTML table was found");
-      return;
-  }
-  table = table.cloneNode(true);
+function tableDownloadHelper(tableDOM) {
+  table = tableDOM.cloneNode(true);
   let csv = [];
   let rows = table.rows;				
   for (let i = 0; i < rows.length; i++) {
@@ -72,20 +55,29 @@ function startDownloadRightClick() {
   
   // // disable prompt because it affects selenium
   // let filename = prompt("File name: ", (table.id || table.id.length > 0) ? table.id : "table");
-  let filename = (table.id || table.id.length > 0) ? table.id : "table";
-  
+  const filename = (table.id || table.id.length > 0) ? table.id : "table";
   csvDownloadHelper(filename, csv);
 }
 
-// downloads tables from https://www.airnow.gov/state/*
-function startDownloadAirNow() {
-  
-  // TODO: check if currentAQI or historicalAQI is the active one
-  
 
-  // get currentAQI
-  alert("download air now");
+// adds a hidden <div> tag with a special id for selenium to pick up
+function addHiddenCvsTag(info) {
+  const hiddenElement = document.createElement("div"); 
+  hiddenElement.setAttribute("id", "hidden_element_for_selenium");
+  hiddenElement.style.display = "none";
+  document.body.appendChild(hiddenElement); 
+  hiddenElement.innerText = info;
+}
 
+function startDownloadRightClick() {
+  if(document.getSelection().focusNode == null)return;
+  let clickedEl = document.getSelection().focusNode.parentElement;
+  let table = clickedEl.closest("table");		
+  if(table === null){
+      alert("No HTML table was found");
+      return;
+  }
+  tableDownloadHelper(table);
 }
 
 
@@ -93,20 +85,15 @@ function startDownloadAirNow() {
 
 // get current url
 try {
-  const url = window.location.toString();
-
   if(window.hasOwnProperty("dltcsvRightClick") && dltcsvRightClick)
   {
-  dltcsvRightClick = false;
-      startDownloadRightClick();
+    dltcsvRightClick = false;
+    startDownloadRightClick();
   }
-  else if(url.match("https://www.airnow.gov/state/*")) 
-  {
-      startDownloadAirNow();
-  }
-  else
-  {
-      alert("no-match");
+  else if(window.hasOwnProperty("tableIdToDownload") && tableIdToDownload.length > 0) {
+    const tableToDownload = document.getElementById(tableIdToDownload);
+    tableIdToDownload = "";
+    tableDownloadHelper(tableToDownload)
   }
 }
 catch(err) {
