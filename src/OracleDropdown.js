@@ -17,7 +17,7 @@ export function OracleDropdown(props){
     <Wrapper>
       <MajorOption onClick={() => setShouldShow1(!shouldShow1)}> <FaCaretDown size={17} style={iconStyle} /> Explore table in Oracle Analytics </MajorOption>
       {!props.isInitialized ? <div />
-        : props.allTableId.length == 0 ?
+        : props.allTableId.length === 0 ?
           <NoTable> no tables on this page </NoTable>
           : props.allTableId.map((tableId, index) => (
             <MinorOption 

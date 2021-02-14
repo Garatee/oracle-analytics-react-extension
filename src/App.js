@@ -22,23 +22,25 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
-      (tabs) => {
-        const { id: tabId } = tabs[0].url;
-        const code = `
-          var tables = [...document.querySelectorAll("table")];
-          tables.forEach((table, index) => {
-            if(!table.id || table.id.length == 0) {
-              table.id = "unamed_table" + index
-            }
-          })
-          tables.map(element => element.id)
-        `;
-        chrome.tabs.executeScript(tabId, { code }, (result) => {
-          this.setState({ isInitialized: true, allTableId: result[0] })
-        });
-      }
-    );
+    if(this.props.isRunningOnChromeExtension) {
+      chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+        (tabs) => {
+          const { id: tabId } = tabs[0].url;
+          const code = `
+            var tables = [...document.querySelectorAll("table")];
+            tables.forEach((table, index) => {
+              if(!table.id || table.id.length === 0) {
+                table.id = "unamed_table" + index
+              }
+            })
+            tables.map(element => element.id)
+          `;
+          chrome.tabs.executeScript(tabId, { code }, (result) => {
+            this.setState({ isInitialized: true, allTableId: result[0] })
+          });
+        }
+      );
+    }
   }
 
   onTargetTable = (tableId, shouldTarget) => {
@@ -82,7 +84,7 @@ class App extends React.Component {
 
   render() {
     return (
-      this.state.status == STATUS.LOGGED_IN ? (
+      this.state.status === STATUS.LOGGED_IN ? (
         <OracleDropdown 
           onClickLogout={this.onClickLogout} 
           onTargetTable={this.onTargetTable}

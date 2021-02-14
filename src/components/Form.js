@@ -1,5 +1,3 @@
-/*global chrome*/
-
 import React from 'react';
 import styled from 'styled-components'
 import './Form.css'
@@ -17,7 +15,7 @@ export const OracleForm = (props) => {
     <Form>
       <MyInputGroup className="col-sm-8">
         <InputGroup.Prepend>
-          <Button variant="outline-secondary"> <FaUserAlt /> </Button>
+          <MyLabel variant="outline-secondary" disabled> <FaUserAlt /> </MyLabel>
         </InputGroup.Prepend>
         <FormControl
           placeholder="Oracle Analytics username"
@@ -28,7 +26,7 @@ export const OracleForm = (props) => {
 
       <MyInputGroup className="col-sm-8">
         <InputGroup.Prepend>
-          <Button variant="outline-secondary"> <FaLock /> </Button>
+          <MyLabel variant="outline-secondary" disabled> <FaLock /> </MyLabel>
         </InputGroup.Prepend>
         <FormControl
           placeholder="Oracle Analytics password"
@@ -39,7 +37,7 @@ export const OracleForm = (props) => {
 
       <MyTextAreaInputGroup className="col-sm-8">
         <InputGroup.Prepend>
-          <Button variant="outline-secondary"> <FaLink /> </Button>
+          <MyLabel variant="outline-secondary" disabled> <FaLink /> </MyLabel>
         </InputGroup.Prepend>
         <FormControl
           placeholder="Oracle Analytics homepage url"
@@ -47,7 +45,7 @@ export const OracleForm = (props) => {
           as="textarea" 
         />
       </MyTextAreaInputGroup>
-      <MyButton variant="primary" onClick={() => props.onClickSubmitForm()} > Submit </MyButton>
+      <MySubmitButton variant="primary" onClick={() => props.onClickSubmitForm()} > Submit </MySubmitButton>
     </Form>
   )
 
@@ -63,8 +61,12 @@ const MyTextAreaInputGroup = styled(MyInputGroup)`
   height: 100px;
 `
 
-const MyButton = styled(Button)`
+const MySubmitButton = styled(Button)`
   width: 60%;
   margin-top: 30px;
   margin-left: 20%;
+`
+
+const MyLabel = styled(Button)`
+  opacity: 1 !important;
 `
