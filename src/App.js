@@ -53,6 +53,7 @@ class App extends React.Component {
           var table = document.getElementById("${tableId}");
           table.style.backgroundColor = "${color}";
           table.style.opacity = ${opacity};
+          table.scrollIntoView({ behavior: 'smooth' });
         `;
         chrome.tabs.executeScript(tabId, { code });
       }
