@@ -17,7 +17,8 @@ class App extends React.Component {
     this.state = {
       status: props.status,
       allTableId: [],
-      isInitialized: false
+      isInitialized: false,
+      url: ""
     }
   }
 
@@ -36,7 +37,7 @@ class App extends React.Component {
             tables.map(element => element.id)
           `;
           chrome.tabs.executeScript(tabId, { code }, (result) => {
-            this.setState({ isInitialized: true, allTableId: result[0] })
+            this.setState({ isInitialized: true, allTableId: result[0], url: tabs[0].url })
           });
         }
       );
@@ -71,6 +72,28 @@ class App extends React.Component {
     );
   }
 
+  onDownloadZillowData = () => {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const { id: tabId } = tabs[0].url;
+        chrome.tabs.executeScript(tabId, {code: `downloadZillow = "gogo";`}, () => { 
+          chrome.tabs.executeScript(tabId, {file: "downloadcsv.js"});
+        });
+      }
+    );
+  }
+
+  onDownloadCurrentZillowData = () => {
+    chrome.tabs.query({ active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
+      (tabs) => {
+        const { id: tabId } = tabs[0].url;
+        chrome.tabs.executeScript(tabId, {code: `downloadCurrentZillow = "gogo";`}, () => { 
+          chrome.tabs.executeScript(tabId, {file: "downloadcsv.js"});
+        });
+      }
+    );
+  }
+
   onClickSubmitForm = () => {
     this.setState({ status: STATUS.LOGGED_IN });
     if(this.props.isRunningOnChromeExtension)
@@ -87,9 +110,12 @@ class App extends React.Component {
     return (
       this.state.status === STATUS.LOGGED_IN ? (
         <OracleDropdown 
+          url={this.state.url}
           onClickLogout={this.onClickLogout} 
           onTargetTable={this.onTargetTable}
           onDownloadTable={this.onDownloadTable}
+          onDownloadZillowData={this.onDownloadZillowData}
+          onDownloadCurrentZillowData={this.onDownloadCurrentZillowData}
           allTableId={this.state.allTableId} 
           isInitialized={this.state.isInitialized}
         />

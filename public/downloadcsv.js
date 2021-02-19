@@ -1,3 +1,5 @@
+var zillowHardcodedData = "[[[1725000],4,3,1421],[[369000],3,2,1650],[[1399000],3,2,1047],[[2399000],4,4,2439],[[529888],1,1,564],[[299000],3,2,1693],[[1439000],3,2,1262],[[899000],2,2,1083]]"
+
 ////////////////////////////////// helper functions //////////////////////////////////
 /**
  * 
@@ -80,6 +82,28 @@ function startDownloadRightClick() {
   tableDownloadHelper(table);
 }
 
+function startZillow(){
+  // Zillow data download
+  let prices = document.getElementsByClassName('list-card-price');
+  let infos = document.getElementsByClassName('list-card-details');
+  if(prices.length != infos.length){
+    alert("lengths do not match");
+    return;
+  }
+  let csv = [];
+  for(let i = 0; i < prices.length; i++){
+      let row = [];
+      let price = prices[i].innerText.replace(/,/g,'').match(/\d+/g).map(Number);
+      row.push(price);
+      let info = infos[i].innerText.replace(/,/g,'').match(/\d+/g).map(Number);
+      for (let j = 0; j< info.length; j++){
+          row.push(info[j]);
+      }
+      csv.push(row);
+  }
+  csvDownloadHelper("zillow_table", csv);
+}
+
 
 //////////////////////////////////////  main /////////////////////////////////////
 
@@ -95,6 +119,14 @@ try {
     tableIdToDownload = "";
     tableDownloadHelper(tableToDownload)
   }
+  else if(window.hasOwnProperty("downloadZillow") && downloadZillow.length > 0) {
+    csvDownloadHelper("zillow_table_94035", JSON.parse(zillowHardcodedData))
+  }
+  else if(window.hasOwnProperty("downloadCurrentZillow") && downloadCurrentZillow.length > 0) {
+    downloadCurrentZillow = "";
+    startZillow();
+  }
+  
 }
 catch(err) {
   alert(err);

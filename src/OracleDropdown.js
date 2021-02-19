@@ -12,12 +12,14 @@ export function OracleDropdown(props){
 
   const [shouldShow1, setShouldShow1] = useState(true);
   const [shouldShow2, setShouldShow2] = useState(true);
+  const isZillow = props.url.startsWith("https://www.zillow.com/")
 
   return (
     <Wrapper>
       <MajorOption onClick={() => setShouldShow1(!shouldShow1)}> <FaCaretDown size={17} style={iconStyle} /> Explore table in Oracle Analytics </MajorOption>
+      { isZillow && <MinorOption shouldShow={shouldShow1} onClick={() => props.onDownloadCurrentZillowData()}> zillow housing data </MinorOption> }
       {!props.isInitialized ? <div />
-        : props.allTableId.length === 0 ?
+        : props.allTableId.length === 0 && !isZillow ?
           <NoTable> no tables on this page </NoTable>
           : props.allTableId.map((tableId, index) => (
             <MinorOption 
@@ -36,7 +38,7 @@ export function OracleDropdown(props){
         <MinorOption shouldShow={shouldShow2}> NY Times Covid data </MinorOption>
         <MinorOption shouldShow={shouldShow2}> Weather data </MinorOption>
         <MinorOption shouldShow={shouldShow2}> NY Times Stock data </MinorOption>
-        <MinorOption shouldShow={shouldShow2}> Zillow housing prices </MinorOption>
+        <MinorOption shouldShow={shouldShow2} onClick={props.onDownloadZillowData} > Zillow housing prices </MinorOption>
 
       <MajorOption> <RiPencilFill size={17} style={iconStyle} /> (Advanced) Create your Own Script </MajorOption>
       <MajorOption> <IoSettingsSharp size={17} style={iconStyle} /> Settings </MajorOption>
