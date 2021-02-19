@@ -1,4 +1,4 @@
-var zillowHardcodedData = "[[[1725000],4,3,1421],[[369000],3,2,1650],[[1399000],3,2,1047],[[2399000],4,4,2439],[[529888],1,1,564],[[299000],3,2,1693],[[1439000],3,2,1262],[[899000],2,2,1083]]"
+var zillowHardcodedData = `[["No. of Bedrooms","No. of Bathrooms","Square Feet","Zipcode","City","House Type","Housing Price"],[3,2,1248,"94089","Sunnyvale","Home",[188000]],[3,2,1693,"94043","Mountain View","House",[1999950]],[3,2,2025,"94089","Sunnyvale","Home",[350000]],[5,4,2103,"94089","Sunnyvale","House",[1888888]],[2,3,1410,"94041","Mountain View","Townhouse",[1249999]],[2,3,1206,"94043","Mountain View","Townhouse",[1169000]],[2,2,1193,"94043","Mountain View","Townhouse",[1180000]],[3,2,1056,"94085","Sunnyvale","House",[1268000]]]`
 
 ////////////////////////////////// helper functions //////////////////////////////////
 /**
@@ -86,19 +86,30 @@ function startZillow(){
   // Zillow data download
   let prices = document.getElementsByClassName('list-card-price');
   let infos = document.getElementsByClassName('list-card-details');
+  let addresses = document.getElementsByClassName('list-card-addr');
+  let housetype = document.getElementsByClassName('list-card-statusText');
   if(prices.length != infos.length){
     alert("lengths do not match");
     return;
   }
   let csv = [];
+  columnname = ['No. of Bedrooms','No. of Bathrooms','Square Feet','Zipcode','City','House Type','Housing Price'];
+  csv.push(columnname);
   for(let i = 0; i < prices.length; i++){
       let row = [];
       let price = prices[i].innerText.replace(/,/g,'').match(/\d+/g).map(Number);
-      row.push(price);
       let info = infos[i].innerText.replace(/,/g,'').match(/\d+/g).map(Number);
       for (let j = 0; j< info.length; j++){
           row.push(info[j]);
       }
+      let address = addresses[i].innerText;
+      let zip = address.substr(address.length-5);
+      let city= address.split(',')[1].substr(1);
+      let type = housetype[i].innerText.substr(2).split(' ')[0];
+      row.push(zip);
+      row.push(city);
+      row.push(type);
+      row.push(price);
       csv.push(row);
   }
   csvDownloadHelper("zillow_table", csv);
