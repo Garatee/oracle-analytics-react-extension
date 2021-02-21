@@ -31,6 +31,7 @@ export const OracleForm = (props) => {
         <FormControl
           placeholder="Oracle Analytics password"
           aria-label="Password"
+          type="password" 
           aria-describedby="basic-addonw"
         />
       </MyInputGroup>
